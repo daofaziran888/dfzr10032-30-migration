@@ -1,0 +1,35 @@
+[
+  {
+    "sample_id": "SMP-2024-0301",
+    "legacy_ref": "LIB-12",
+    "legacy_version": null,
+    "archive_path": "lib12_notice_2024.html",
+    "source_url": "https://lib.example.gov.cn/notice/2024-spring",
+    "encoding": "UTF-8",
+    "content_encoding": "utf-8",
+    "archived_at": "2024-03-01T18:00:00",
+    "remark": "归档时没有版本号，两套 LIB-12 规格都能匹配；仅全页含临时开放时间"
+  },
+  {
+    "sample_id": "SMP-2024-0402",
+    "legacy_ref": "LEGACY-LIB40-01",
+    "legacy_version": "1.0.0",
+    "archive_path": "lib40_holiday.html",
+    "source_url": "https://lib.example.gov.cn/notice/holiday-arrangement",
+    "encoding": "UTF-8",
+    "content_encoding": "utf-8",
+    "archived_at": "2024-04-02T19:10:00",
+    "remark": "带旧引用的归档样本，用于验证新环境回查原出处"
+  },
+  {
+    "sample_id": "SMP-2020-1205",
+    "legacy_ref": "LIB-31",
+    "legacy_version": null,
+    "archive_path": "lib31_reading_month.html",
+    "source_url": "https://lib.example.gov.cn/notice/reading-month",
+    "encoding": "GBK",
+    "content_encoding": "gbk",
+    "archived_at": "2020-12-05T11:00:00",
+    "remark": "GBK 老页面；旧内容选择器空缺，正文应判未能解析并给出位置"
+  }
+]

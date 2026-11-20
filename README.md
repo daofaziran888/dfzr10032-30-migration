@@ -73,3 +73,53 @@ npm run dev
   `backend/app/routers/<模块>.py`，业务规则在 `backend/app/services/<模块>.py`。
 - 列表接口统一返回 `{ items, total, page, size }`，动作接口统一返回 `{ ok, message }`。
 - 状态流转只允许在 `app/services` 里改，路由层不做业务判断。
+
+## 历史抓取规则迁移（crawler_migration）
+
+把网页采集规则的旧平铺清单迁移为带版本的结构化采集定义，并对随旧登记归档的
+页面样本做可复核解析。核心代码在 `backend/app/migration/`，只依赖 Python 标准库：
+
+| 文件 | 职责 |
+| --- | --- |
+| `migration/builder.py` | 旧清单 → 版本化定义与迁移对照明细，逐字段溯源并做跨规则拼装自检 |
+| `migration/dom.py` | 零依赖 HTML/DOM 与 CSS 选择器（类型/类/ID、后代/子代），带字符位置追踪 |
+| `migration/engine.py` | 按迁移对照为每份样本选择可复核定义，写出解析版本与未解析字段位置 |
+| `migration/registry.py` | 新环境统一入口：装载归档、预跑解析、凭旧引用回查原出处、编目核查 |
+
+夹具（旧清单、样本登记、GBK/UTF-8 归档原页）在 `backend/fixtures/migration/`。
+
+迁移口径：
+
+- 含义不足的旧字段（空选择器、未登记语义的键）只保留原文并标记「留原文待核」，
+  绝不猜测或补默认选择器；
+- 每个结构化字段带 `source_legacy_id`，同一条旧规则独立建版，
+  禁止把 A 规则的抓取频率与 B 规则的正文选择器拼成一套（有运行时自检）；
+- 同一规则编号的多份旧规格各自得到并存版本（如全页 `1.0.0` / 正文 `1.1.0`）；
+- 样本的旧引用可无版本号，`/api/crawler-migration/resolve-ref` 可回查全部候选版本，
+  `/api/crawler-migration/archive/{sample_id}` 从归档打开原页，不重新抓取网络；
+- 两个版本都能逐字核实的公告标题可编目录；仅出现在全页、没有任何版本选择器登记的
+  临时开放时间，保留页面取证与字符位置，但标记为「欠采集版本凭据」挂起待核。
+
+### 主要接口（前缀 `/api/crawler-migration`）
+
+- `GET /summary` 迁移总览
+- `GET /migration-mapping` 历史抓取规则迁移对照明细
+- `GET /definitions` 带版本的结构化采集定义
+- `GET /parse-records`、`/parse-records/{sample_id}` 样本解析记录与未解析字段位置
+- `GET /catalog-review` 可编目公告与等待核查项
+- `GET /resolve-ref?legacy_ref=` 旧引用回查候选版本与归档样本
+- `GET /archive/{sample_id}` 打开归档原页
+- `POST /rerun` 重新装载归档并重跑迁移解析
+
+### 测试
+
+```bash
+make test
+# 或在 backend/ 下
+python3 -I scripts/run_tests.py        # 单元/端到端用例（无第三方依赖也可运行）
+python3 -I scripts/run_api_check.py    # 视图序列化、业务口径、路由声明核验
+python3 -I scripts/run_router_smoke.py # 路由 -> 服务 -> 注册表全链路冒烟
+```
+
+装有 `pytest`/`httpx` 时 `scripts/run_tests.py` 自动改用真 pytest，
+`tests/test_http_api.py` 会通过 TestClient 复核真实 HTTP 行为。

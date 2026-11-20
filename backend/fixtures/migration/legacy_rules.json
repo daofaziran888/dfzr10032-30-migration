@@ -1,0 +1,61 @@
+[
+  {
+    "legacy_id": "LEGACY-LIB12-A",
+    "rule_no": "LIB-12",
+    "archived_at": "2021-03-05T09:00:00",
+    "remark": "旧系统全页抓取登记，同编号两份规格之一",
+    "flat_fields": {
+      "目标网址": "https://lib.example.gov.cn/notice/2024-spring",
+      "字符编码": "UTF-8",
+      "抓取频率": "每日 06:00",
+      "抓取范围": "全页",
+      "标题选择器": "h1.notice-title",
+      "内容选择器": "body",
+      "翻页参数": "page={n}"
+    }
+  },
+  {
+    "legacy_id": "LEGACY-LIB12-B",
+    "rule_no": "LIB-12",
+    "archived_at": "2021-04-18T14:30:00",
+    "remark": "旧系统正文抓取登记，同编号两份规格之二，仅取正文容器",
+    "flat_fields": {
+      "目标网址": "https://lib.example.gov.cn/notice/2024-spring",
+      "字符编码": "UTF-8",
+      "抓取频率": "每周一 08:00",
+      "抓取范围": "正文",
+      "标题选择器": "h1.notice-title",
+      "正文选择器": "div.article-body",
+      "去重策略": "按URL去重"
+    }
+  },
+  {
+    "legacy_id": "LEGACY-LIB31-01",
+    "rule_no": "LIB-31",
+    "archived_at": "2020-11-02T10:15:00",
+    "remark": "早期登记，内容选择器长期空缺，迁移时不得补默认选择器",
+    "flat_fields": {
+      "目标网址": "https://lib.example.gov.cn/notice/reading-month",
+      "字符编码": "GBK",
+      "抓取频率": "每日 07:30",
+      "标题选择器": "h2.ann-head",
+      "内容选择器": "",
+      "备注": "旧版页面改版后未回填"
+    }
+  },
+  {
+    "legacy_id": "LEGACY-LIB40-01",
+    "rule_no": "LIB-40",
+    "archived_at": "2022-01-09T16:00:00",
+    "remark": "历史字段语义不清，整段保留原文待核",
+    "flat_fields": {
+      "目标网址": "https://lib.example.gov.cn/notice/holiday-arrangement",
+      "字符编码": "UTF-8",
+      "抓取频率": "每日 12:00",
+      "标题选择器": "h1.page-title",
+      "内容选择器": "div#main .content-wrap",
+      "旧系统内部代号": "X-7723",
+      "抓取位": "第二块（待确认）"
+    }
+  }
+]
